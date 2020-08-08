@@ -1,5 +1,7 @@
 package com.carterchen247.breakingbadapp
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -8,9 +10,12 @@ import timber.log.Timber
 
 class AppContainer {
 
+    val applicationScope by lazy { CoroutineScope(SupervisorJob()) }
+
     private val httpLoggingInterceptor by lazy {
         HttpLoggingInterceptor().apply {
-            level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
+            level =
+                if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
         }
     }
 

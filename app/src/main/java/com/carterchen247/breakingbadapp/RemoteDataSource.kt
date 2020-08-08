@@ -1,9 +1,13 @@
 package com.carterchen247.breakingbadapp
 
-import retrofit2.Call
-
-class RemoteDataSource(private val apiService: ApiService) {
-    fun getCharacterInfo(id: Int): Call<List<CharacterInfo>> {
-        return apiService.getCharacterInfo(id)
+class RemoteDataSource(
+    private val apiService: ApiService
+) {
+    suspend fun getCharactersInfo(id: Int): Result<List<CharacterInfo>> {
+        return try {
+            Result.success(apiService.getCharactersInfo(id))
+        } catch (throwable: Throwable) {
+            Result.failure(throwable)
+        }
     }
 }
