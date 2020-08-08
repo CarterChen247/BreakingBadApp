@@ -13,12 +13,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         btnGetCharacterInfo.setOnClickListener {
-            (application as App).appContainer.remoteDataSource.apiService.getCharacterInfo(1).enqueue(object : Callback<String> {
-                override fun onFailure(call: Call<String>, t: Throwable) {
+            (application as App).appContainer.remoteDataSource.apiService.getCharacterInfo(1).enqueue(object : Callback<List<CharacterInfo>> {
+                override fun onFailure(call: Call<List<CharacterInfo>>, t: Throwable) {
                     Timber.d("get character info onFailure")
                 }
 
-                override fun onResponse(call: Call<String>, response: Response<String>) {
+                override fun onResponse(call: Call<List<CharacterInfo>>, response: Response<List<CharacterInfo>>) {
                     Timber.d("get character info onResponse")
                 }
             })
