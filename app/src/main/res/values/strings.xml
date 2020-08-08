@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">BreakingBadApp</string>
+    <string name="getcharacterinfo">getCharacterInfo</string>
 </resources>
