@@ -2,26 +2,30 @@ package com.carterchen247.breakingbadapp
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
     private val appContainer by lazy { (application as App).appContainer }
-    private val remoteDataSource by lazy { appContainer.remoteDataSource }
+    private val viewModel: CharacterViewModel by lazy {
+        ViewModelProvider(
+            viewModelStore,
+            CharacterViewModelFactory(appContainer.remoteDataSource)
+        ).get(CharacterViewModel::class.java)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        viewModel.characterInfoEvent.observe(this, Observer { characterInfo ->
+            Timber.d("characterInfo=$characterInfo")
+        })
+
         btnGetCharacterInfo.setOnClickListener {
-            appContainer.applicationScope.launch {
-                remoteDataSource.getCharactersInfo(1).fold({ charactersInfo ->
-                    Timber.d("getCharactersInfo success. $charactersInfo")
-                }, { t ->
-                    Timber.d("getCharactersInfo failed. $t")
-                })
-            }
+            viewModel.getCharacterInfo(1)
         }
     }
 }
