@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
 
@@ -22,6 +23,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         viewModel.characterInfoEvent.observe(this, Observer { characterInfo ->
             Timber.d("characterInfo=$characterInfo")
+            characterInfo.let {
+                Glide.with(this).load(it.img).into(characterImg)
+                characterName.text = it.name
+            }
         })
 
         btnGetCharacterInfo.setOnClickListener {
