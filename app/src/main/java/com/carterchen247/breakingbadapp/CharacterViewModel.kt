@@ -8,17 +8,21 @@ import timber.log.Timber
 
 class CharacterViewModel(private val remoteDataSource: RemoteDataSource) : ViewModel() {
 
-    val characterInfoEvent = MutableLiveData<CharacterInfo>()
+    val characterInfoEvent = MutableLiveData<List<CharacterInfo>>()
+    val errorEvent = MutableLiveData<Throwable>()
 
-    fun getCharacterInfo(id: Int) {
+    fun getCharacterInfo() {
         viewModelScope.launch {
-            remoteDataSource.getCharactersInfo(id).fold({ charactersInfo ->
-                Timber.d("getCharactersInfo success. $charactersInfo")
-                charactersInfo.first().let {
-                    characterInfoEvent.value = it
+            remoteDataSource.getCharactersInfo().fold({ charactersInfo ->
+                val result = if (charactersInfo.isNullOrEmpty()){
+                    listOf()
+                }else{
+                    charactersInfo
                 }
-            }, { t ->
-                Timber.d("getCharactersInfo failed. $t")
+                characterInfoEvent.value = result
+            }, { throwable ->
+                Timber.d("getCharactersInfo failed. $throwable")
+                errorEvent.value = throwable
             })
         }
     }
