@@ -49,6 +49,7 @@ class MainActivity : AppCompatActivity() {
         recyclerView.run {
             layoutManager = GridLayoutManager(this@MainActivity, 3)
             overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+            addItemDecoration(CharacterItemDecoration(resources.getDimension(R.dimen.margin_top_characters_info_list)))
             adapter = charactersInfoAdapter
         }
     }
