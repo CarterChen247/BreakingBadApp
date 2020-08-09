@@ -1,5 +1,6 @@
 package com.carterchen247.breakingbadapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -42,14 +43,20 @@ class MainActivity : AppCompatActivity() {
     private fun initViews() {
         charactersInfoAdapter =
             CharactersInfoAdapter(object : CharactersInfoAdapter.ItemClickListener {
-                override fun onItemClick(characterInfo: CharacterInfo) {
-                    TODO("Not yet implemented")
+                override fun onItemClicked(characterInfo: CharacterInfo) {
+                    startActivity(
+                        Intent(
+                            this@MainActivity,
+                            CharacterInfoActivity::class.java
+                        ).apply {
+                            putExtra(CharacterInfoActivity.CHARACTER_INFO, characterInfo)
+                        })
                 }
             })
         recyclerView.run {
-            layoutManager = GridLayoutManager(this@MainActivity, 3)
             overScrollMode = RecyclerView.OVER_SCROLL_NEVER
             addItemDecoration(CharacterItemDecoration(resources.getDimension(R.dimen.margin_top_characters_info_list)))
+            layoutManager = GridLayoutManager(this@MainActivity, 3)
             adapter = charactersInfoAdapter
         }
     }
